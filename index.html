@@ -1,1 +1,86 @@
-first chart page
+<html>
+	<head>
+
+	</head>
+	<body>
+  		<div id="chartStage"></div>
+  		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+		<script type="text/javascript">
+			var svg = dimple.newSvg("#chartStage", 900, 600);
+			var data = [
+			
+						{"Localization": "cytoplasm","Density(%)": "83.1","Reference": "Dataset", "count": "2064"}, 
+						{"Localization": "cytoplasm","Density(%)": "52.7","Reference": "Reference", "count": "72245"}, 
+						{"Localization": "outer","Density(%)": "1.9","Reference": "Dataset", "count": "810"},
+						{"Localization": "outer","Density(%)": "1.7","Reference": "Reference", "count": "2348"},
+						{"Localization": "fimbrium","Density(%)": "0.1","Reference": "Dataset", "count": "72245"}, 
+						{"Localization": "fimbrium","Density(%)": "0.6","Reference": "Reference","count": "810"}, 
+						{"Localization": "periplasm","Density(%)": "6.2","Reference": "Dataset","count": "92"}, 
+						{"Localization": "periplasm","Density(%)": "3.8","Reference": "Reference", "count": "5262"}, 
+						{"Localization": "secreted","Density(%)": "5.0","Reference": "Dataset", "count": "25931"}, 
+						{"Localization": "secreted","Density(%)": "22.2","Reference": "Reference" , "count": "30421"}, 
+						{"Localization": "inner","Density(%)": "3.7","Reference": "Dataset", "count": "2"}, 
+						{"Localization": "inner","Density(%)": "18.9","Reference": "Reference", "count": "25931"}
+						
+					];
+
+			var myChart = new dimple.chart(svg, data);
+
+			var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
+			var y = myChart.addMeasureAxis("y",  "Density(%)");
+
+			var s = myChart.addSeries("Reference", dimple.plot.bar);
+
+
+			myChart.addLegend(200, 10, 510, 20, "right");
+
+			myChart.draw();
+			y.tickFormat = ".d"; //for float number format
+
+			x.titleShape.text("Subcellular localization classes");
+			y.titleShape.text("Sequence frequency per localization class(%)");
+
+			s.shapes.each(function(d) {
+
+				var key1 , key2 , id;
+
+				if(d.key.includes("Dataset_")){key1 = "Dataset";}
+				else{key1 = "Reference";}
+				key2 = d.x;
+
+				for (var i = 0 ; i < data.length ; i++) {
+
+					if(data[i].Reference == key1 && data[i].Localization == key2){id = i;}
+				};
+	            // Get the shape as a d3 selection
+	            var shape = d3.select(this),
+
+	            // Get the height and width from the scales
+	            height = myChart.y + myChart.height - y._scale(d.height);
+	           // width = x._scale(d.width);
+	            width = d.width;
+
+	            // Add a text label for the value
+	            svg.append("text")
+
+	            // Position in the centre of the shape (vertical position is
+	            // manually set due to cross-browser problems with baseline)
+	            .attr("x", parseFloat(shape.attr("x")) + parseFloat(shape.attr("width"))/2)
+	            .attr("y", y._scale(d.height/2))
+	            // Centre align
+	            .style("text-anchor", "middle")
+	            .style("font-size", "10px")
+	            .style("font-family", "sans-serif")
+
+	            // Make it a little transparent to tone down the black
+	            .style("opacity", 0.7)
+
+	            // Format the number
+	            .text(d3.format("")(data[id].count));
+
+	          });
+
+		</script>
+	</body>
+</html>

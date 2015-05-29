@@ -8,7 +8,7 @@
 		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
 		<script type="text/javascript">
 			var svg = dimple.newSvg("#chartStage", 900, 600);
-			var data = [
+			var barChartData = [
 			
 						{"Localization": "cytoplasm","Density(%)": "83.1","Reference": "Dataset", "count": "2064"}, 
 						{"Localization": "cytoplasm","Density(%)": "52.7","Reference": "Reference", "count": "72245"}, 
@@ -25,7 +25,7 @@
 						
 					];
 
-			var myChart = new dimple.chart(svg, data);
+			var myChart = new dimple.chart(svg, barChartData);
 
 			var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
 			var y = myChart.addMeasureAxis("y",  "Density(%)");
@@ -49,9 +49,9 @@
 				else{key1 = "Reference";}
 				key2 = d.x;
 
-				for (var i = 0 ; i < data.length ; i++) {
+				for (var i = 0 ; i < barChartData.length ; i++) {
 
-					if(data[i].Reference == key1 && data[i].Localization == key2){id = i;}
+					if(barChartData[i].Reference == key1 && barChartData[i].Localization == key2){id = i;}
 				};
 	            // Get the shape as a d3 selection
 	            var shape = d3.select(this),
@@ -77,7 +77,7 @@
 	            .style("opacity", 0.7)
 
 	            // Format the number
-	            .text(d3.format("")(data[id].count));
+	            .text(d3.format("")(barChartData[id].count));
 
 	          });
 

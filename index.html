@@ -1,16 +1,16 @@
 <html>
 	<head>
-	<meta charset="utf-8">
-  	<title>microbiomeCharts</title>
-  	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+
 	</head>
 	<body>
   		<div id="chartStage"></div>
-  		
+  		<div id="chartStacked"></div>
+  		<div id="chartPie"></div>
+  		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
 		<script type="text/javascript">
-			var svg = dimple.newSvg("#chartStage", 900, 600);
-			var data = [
+		
+			var barChartData = [
 			
 						{"Localization": "cytoplasm","Density(%)": "83.1","Reference": "Dataset", "count": "2064"}, 
 						{"Localization": "cytoplasm","Density(%)": "52.7","Reference": "Reference", "count": "72245"}, 
@@ -26,8 +26,65 @@
 						{"Localization": "inner","Density(%)": "18.9","Reference": "Reference", "count": "25931"}
 						
 					];
+///////////////////////////////////////////////////////////STACKED DATA///////////////////////////////////////////////////////////////////
+			var stackedChartData = [
+					{"Localization":"cytoplasm","Reliability":"Reliability Index [81..100]", "Value":"33.6","Reference": "Dataset","Order":1}, 
+					{"Localization":"cytoplasm","Reliability":"Reliability Index [81..100]", "Value": "27.3","Reference":"Reference","Order":1}, 
+					{"Localization": "outer","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1},
+					{"Localization": "outer","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1},
+					{"Localization": "fimbrium","Reliability":"Reliability Index [81..100]", "Value": "0.6","Reference": "Dataset","Order":1}, 
+					{"Localization": "fimbrium","Reliability":"Reliability Index [81..100]", "Value": "7.7","Reference": "Reference","Order":1}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1}, 
+					{"Localization": "inner","Reliability":"Reliability Index [81..100]", "Value": "0.6","Reference": "Dataset","Order":1}, 
+					{"Localization": "inner","Reliability":"Reliability Index [81..100]", "Value": "0.3","Reference": "Reference","Order":1},
 
-			var myChart = new dimple.chart(svg, data);
+					{"Localization":"cytoplasm","Reliability":"Reliability Index [41..80]","Value":"23.9","Reference":"Dataset","Order":2}, 
+					{"Localization":"cytoplasm","Reliability":"Reliability Index [41..80]", "Value": "10.9","Reference": "Reference","Order":2}, 
+					{"Localization": "outer","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2},
+					{"Localization": "outer","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2},
+					{"Localization": "fimbrium","Reliability":"Reliability Index [41..80]", "Value": "0.1","Reference": "Dataset","Order":2}, 
+					{"Localization": "fimbrium","Reliability":"Reliability Index [41..80]", "Value": "2.0","Reference": "Reference","Order":2}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2}, 
+					{"Localization": "inner","Reliability":"Reliability Index [41..80]", "Value": "0.8","Reference": "Dataset","Order":2}, 
+					{"Localization": "inner","Reliability":"Reliability Index [41..80]", "Value": "0.7","Reference": "Reference","Order":2},
+						
+					{"Localization": "cytoplasm","Reliability":"Reliability Index [0..40]", "Value": "25.6","Reference": "Dataset","Order":3}, 
+					{"Localization": "cytoplasm","Reliability":"Reliability Index [0..40]", "Value": "14.5","Reference": "Reference","Order":3}, 
+					{"Localization": "outer","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3},
+					{"Localization": "outer","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3},
+					{"Localization": "fimbrium","Reliability":"Reliability Index [0..40]", "Value": "3.0","Reference": "Dataset","Order":3}, 
+					{"Localization": "fimbrium","Reliability":"Reliability Index [0..40]", "Value": "9.2","Reference": "Reference","Order":3}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3}, 
+					{"Localization": "periplasm","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3}, 
+					{"Localization": "secreted","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3}, 
+					{"Localization": "inner","Reliability":"Reliability Index [0..40]", "Value": "4.9","Reference": "Dataset","Order":3}, 
+					{"Localization": "inner","Reliability":"Reliability Index [0..40]", "Value": "2.8","Reference": "Reference","Order":3}
+						
+					];
+//////////////////////////////////////////////////////////////////////// PIECHART Data /////////////////////////////////////////////////////////
+
+			var pieChartData = [
+			
+						{"Type": "Transmembrane proteins","dataset2_sequences": "109","reference_sequences": "28359" , }, 
+						//{"Type": "Transmembrane proteins","dataset2_sequences": "52.7","Reference": "Reference", "count": "72245"}, 
+						{"Type": "Signaling proteins","dataset2_sequences": "166","reference_sequences": "19600"},
+						//{"Type": "Signaling proteins","dataset2_sequences": "1.7","Sequences": "Reference", "count": "2348"},
+						{"Type": "No prediction","dataset2_sequences": "2208","reference_sequences": "89058"}, 
+						//{"Type": "No prediction","dataset2_sequences": "0.6","Sequences": "Reference","count": "810"}
+						
+					];
+					
+		doubleBarDrawing();
+		function doubleBarDrawing(){
+			var svg = dimple.newSvg("#chartStage", 1200, 600);		
+			var myChart = new dimple.chart(svg, barChartData);
 
 			var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
 			var y = myChart.addMeasureAxis("y",  "Density(%)");
@@ -37,7 +94,9 @@
 
 			myChart.addLegend(200, 10, 510, 20, "right");
 
-			myChart.draw();
+			myChart.staggerDraw = true;
+			myChart.ease = "bounce";
+			myChart.draw(1000);
 			y.tickFormat = ".d"; //for float number format
 
 			x.titleShape.text("Subcellular localization classes");
@@ -51,9 +110,9 @@
 				else{key1 = "Reference";}
 				key2 = d.x;
 
-				for (var i = 0 ; i < data.length ; i++) {
+				for (var i = 0 ; i < barChartData.length ; i++) {
 
-					if(data[i].Reference == key1 && data[i].Localization == key2){id = i;}
+					if(barChartData[i].Reference == key1 && barChartData[i].Localization == key2){id = i;}
 				};
 	            // Get the shape as a d3 selection
 	            var shape = d3.select(this),
@@ -79,9 +138,102 @@
 	            .style("opacity", 0.7)
 
 	            // Format the number
-	            .text(d3.format("")(data[id].count));
+	            .text(d3.format("")(barChartData[id].count));
 
 	          });
+			};
+		stackedBarDrawing();
+		function stackedBarDrawing(){
+			var svg = dimple.newSvg("#chartStacked", 1200, 600);
+				var myChart = new dimple.chart(svg, stackedChartData);
+
+				var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
+
+				var y = myChart.addMeasureAxis("y",  "Value");
+
+				var s = myChart.addSeries( ["Order", "Reliability"], dimple.plot.bar);
+				s.addOrderRule("Order");
+				
+				s.categoryFields = ["Reliability"];
+				myChart.addLegend(200, 10, 510, 20, "right");
+				myChart.staggerDraw = true;
+				myChart.ease = "bounce";
+				myChart.draw(1000);
+				y.tickFormat = ".d"; //for float number format
+
+				x.titleShape.text(" ");
+				y.titleShape.text("Sequence frequency per localization class and RI(%)");
+
+				/*
+				s.shapes.each(function(d) {
+					
+					var shape = d3.select(this);
+					svg.append("text")
+	                .attr("x", parseFloat(shape.attr("x")) + parseInt(shape.attr('width')) / 2)
+	                .attr("y", y._scale(d.height/2))
+	                .style("text-anchor", "middle")
+	                .style("font-size", "10px")
+	                .style("font-family", "sans-serif")
+	                .style("opacity", 0.7)
+	                .text(d.yValue);
+		           });
+*/
+		}
+		pieBarDrawing();
+		function pieBarDrawing(){
+			var width = 600;
+			var height = 400;
+
+			var svg = dimple.newSvg("#chartPie", width, height);   
+	        var myChart = new dimple.chart(svg, pieChartData);
+
+	        svg.append("text")
+	        		.attr("x", width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "10px")
+	                .style("font-family", "sans-serif")
+	                .text("Dataset");
+		    
+			var y = myChart.addMeasureAxis("p",  "dataset2_sequences");
+			myChart.addSeries( "Type", dimple.plot.pie);
+			//mySeries = myChart.addSeries( ["dataset2_sequences","Type"], dimple.plot.pie);
+			y.tickFormat = ".d";
+
+			/*mySeries.getTooltipText = function (e) {
+                return [
+                    e.aggField[1] + ":" + e.aggField[0],
+                    (1000*aggField[0].piePct)/10
+                ];
+            };*/
+		    myLegend = myChart.addLegend(400, 20, 150, 300, "right");
+		    
+		    myChart.draw();
+
+
+		    ////////////////////////////////////////////////////////////////////////////////////////
+
+
+			var svg2 = dimple.newSvg("#chartPie", width, height);	    
+	        var myChart2 = new dimple.chart(svg2, pieChartData);
+
+	        svg2.append("text")
+	        		.attr("x",  width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "10px")
+	                .style("font-family", "sans-serif")
+	                .text("Reference");
+		    
+			var y2 = myChart2.addMeasureAxis("p",  "reference_sequences");
+
+			myChart2.addSeries( "Type", dimple.plot.pie);
+			y2.tickFormat = ".d";
+
+		    myLegend2 = myChart2.addLegend(400, 20, 150, 300, "right");
+		    
+		    myChart2.draw();
+		}
 		</script>
 	</body>
 </html>

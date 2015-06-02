@@ -1,0 +1,15 @@
+[
+{"Disordered Regions": "0","Sequences": "Reference","Number of Sequences": 110035},
+{"Disordered Regions": "1","Sequences": "Reference","Number of Sequences": 22913},
+{"Disordered Regions": "2","Sequences": "Reference","Number of Sequences": 3502},
+{"Disordered Regions": "3","Sequences": "Reference","Number of Sequences": 437},
+{"Disordered Regions": "4","Sequences": "Reference","Number of Sequences": 75},
+{"Disordered Regions": "5","Sequences": "Reference","Number of Sequences": 21},
+{"Disordered Regions": "10","Sequences": "Reference","Number of Sequences": 2},
+{"Disordered Regions": "15","Sequences": "Reference","Number of Sequences": 1},
+
+{"Disordered Regions": "0","Sequences": "Dataset","Number of Sequences": 2035},
+{"Disordered Regions": "1","Sequences": "Dataset","Number of Sequences": 293},
+{"Disordered Regions": "2","Sequences": "Dataset","Number of Sequences": 72},
+{"Disordered Regions": "3","Sequences": "Dataset","Number of Sequences": 3}
+]

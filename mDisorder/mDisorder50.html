@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+  	<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+</head>
+<body>
+
+
+
+
+<p></p>
+<div id="mDisorder50">
+  <script type="text/javascript">
+    var svg = dimple.newSvg("#mDisorder50", 1200, 600);
+    d3.json("data/mDisorder50.json", function (data) {
+
+      var myChart = new dimple.chart(svg, data);
+      myChart.setBounds(60, 30, 505, 305);
+      var x = myChart.addCategoryAxis("x", "Disordered Regions");
+      x.addOrderRule("Disordered Regions");
+      myChart.addMeasureAxis("y", "Number of Sequences");
+
+      var s = myChart.addSeries("Sequences", dimple.plot.line);
+      s.lineWeight = 3;
+      s.lineMarkers = true;
+
+      myChart.addLegend(60, 10, 500, 20, "right");
+
+
+      myChart.draw();
+    });
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+[
+{"Disordered Regions": "0","Sequences": "Reference","Number of Sequences": 41792},
+{"Disordered Regions": "1","Sequences": "Reference","Number of Sequences": 66614},
+{"Disordered Regions": "2","Sequences": "Reference","Number of Sequences": 20893},
+{"Disordered Regions": "3","Sequences": "Reference","Number of Sequences": 5257},
+{"Disordered Regions": "4","Sequences": "Reference","Number of Sequences": 1550},
+{"Disordered Regions": "6","Sequences": "Reference","Number of Sequences": 189},
+{"Disordered Regions": "7","Sequences": "Reference","Number of Sequences": 69},
+{"Disordered Regions": "8","Sequences": "Reference","Number of Sequences": 40},
+{"Disordered Regions": "10","Sequences": "Reference","Number of Sequences": 8},
+{"Disordered Regions": "15","Sequences": "Reference","Number of Sequences": 4},
+{"Disordered Regions": "20","Sequences": "Reference","Number of Sequences": 20},
+
+
+{"Disordered Regions": "0","Sequences": "Dataset","Number of Sequences": 533},
+{"Disordered Regions": "1","Sequences": "Dataset","Number of Sequences": 1400},
+{"Disordered Regions": "2","Sequences": "Dataset","Number of Sequences": 376},
+{"Disordered Regions": "3","Sequences": "Dataset","Number of Sequences": 68},
+{"Disordered Regions": "4","Sequences": "Dataset","Number of Sequences": 17},
+{"Disordered Regions": "5","Sequences": "Dataset","Number of Sequences": 3},
+{"Disordered Regions": "6","Sequences": "Dataset","Number of Sequences": 2},
+{"Disordered Regions": "7","Sequences": "Dataset","Number of Sequences": 3},
+{"Disordered Regions": "8","Sequences": "Dataset","Number of Sequences": 1}
+
+]

@@ -6,9 +6,7 @@
   		<div id="chartStage"></div>
   		<div id="chartStacked"></div>
   		<div id="chartPie"></div>
-  		<div id="mDisorder30"></div>
-  		<div id="mDisorder50"></div>
-  		<div id="mDisorder80"></div>
+  		<div id="mDisorder"></div>
   		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
 		<script type="text/javascript">
@@ -77,7 +75,7 @@
 					}
 
 
-					
+
 		handler("pie",JSON_TMSEG_distribution);
 		handler("disorder",JSON_MDISORDER_disordered_80);	
 		handler("doubleBar",JSON_LC3Distribution);
@@ -455,28 +453,28 @@
 
 		function Disorder(data){
 
-			var disorder30Data = [];
+			var disorderData = [];
 
 				for (var obj in data){
-						disorder30Data.push({
+						disorderData.push({
 							"Disordered Regions" : obj,
 							"Sequences": "Reference",
 							"Number of Sequences": data[obj]["reference_sequences"]
 						})
-						disorder30Data.push({
+						disorderData.push({
 							"Disordered Regions" : obj,
 							"Sequences": "Dataset 1",
 							"Number of Sequences": data[obj]["dataset1_sequences"]
 						})
-						disorder30Data.push({
+						disorderData.push({
 							"Disordered Regions" : obj,
 							"Sequences": "Dataset 2",
 							"Number of Sequences": data[obj]["dataset2_sequences"]
 						})
 				};
 
-			var svg = dimple.newSvg("#mDisorder30", 1200, 600);
-      		var myChart = new dimple.chart(svg, disorder30Data);
+			var svg = dimple.newSvg("#mDisorder", 1200, 600);
+      		var myChart = new dimple.chart(svg, disorderData);
 
       		var x = myChart.addCategoryAxis("x", "Disordered Regions");
       		var y = myChart.addMeasureAxis("y", "Number of Sequences");

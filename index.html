@@ -75,81 +75,226 @@
 						"2":{"dataset2_sequences":"1","reference_sequences":"118","dataset1_sequences":100000}
 
 					}
+
+
+					
+		handler("pie",JSON_TMSEG_distribution);
+		handler("disorder",JSON_MDISORDER_disordered_80);	
+		handler("doubleBar",JSON_LC3Distribution);
+		handler("stackedBar",JSON_LC3distributionRI);
+
+		function handler (type,data){
+			if(type == "doubleBar"){
+
+				doubleBarDrawing(data);
+			}
+			else if(type == "stackedBar"){
+
+				stackedBarDrawing(data);
+			}
+			else if(type == "pie"){
+
+				pieBarDrawing(data);
+			}
+			else if(type == "disorder"){
+
+				Disorder(data);
+			}
+
+		}
+
+
+		function doubleBarDrawing(data){
 			
-			handler("pie",JSON_TMSEG_distribution);
-			handler("disorder",JSON_MDISORDER_disordered_80);	
-			handler("doubleBar",JSON_LC3Distribution);
-			handler("stackedBar",JSON_LC3distributionRI);
+			var DoublebarChartData = [];
 
-			function handler (type,data){
-				if(type == "doubleBar"){
+			for (var obj in data){
 
-					doubleBarDrawing(data);
-				}
-				else if(type == "stackedBar"){
+					DoublebarChartData.push({
 
-					stackedBarDrawing(data);
-				}
-				else if(type == "pie"){
+						"Localization": obj,
+						"Sequence frequency": data[obj]["reference_percentage"],
+						"Sequences": "Reference"
+						//"count": "Reference"
+						
 
-					pieBarDrawing(data);
-				}
-				else if(type == "disorder"){
+					})
+					DoublebarChartData.push({
 
-					Disorder(data);
-				}
+						"Localization": obj,
+						"Sequence frequency": data[obj]["dataset1_percentage"],
+						"Sequences": "Dataset 1"
+						//"count": "Dataset"
+						
+					})
+					DoublebarChartData.push({
 
+						"Localization": obj,
+						"Sequence frequency": data[obj]["dataset2_percentage"],
+						"Sequences": "Dataset 2"
+						//"count": "Dataset"
+						
+					})
 			};
 
-			function doubleBarDrawing(data){
-				
-				var DoublebarChartData = [];
 
-				for (var obj in data){
+			var svg = dimple.newSvg("#chartStage", 1200, 600);		
+			var myChart = new dimple.chart(svg, DoublebarChartData);
 
-						DoublebarChartData.push({
+			var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
+			var y = myChart.addMeasureAxis("y",  "Sequence frequency");
 
-							"Localization": obj,
-							"Sequence frequency": data[obj]["reference_percentage"],
-							"Sequences": "Reference"
-							//"count": "Reference"
-							
+			var s = myChart.addSeries("Sequences", dimple.plot.bar);
 
-						})
-						DoublebarChartData.push({
+			myLegend = myChart.addLegend(200, 10, 510, 20, "right");
 
-							"Localization": obj,
-							"Sequence frequency": data[obj]["dataset1_percentage"],
-							"Sequences": "Dataset 1"
-							//"count": "Dataset"
-							
-						})
-						DoublebarChartData.push({
 
-							"Localization": obj,
-							"Sequence frequency": data[obj]["dataset2_percentage"],
-							"Sequences": "Dataset 2"
-							//"count": "Dataset"
-							
-						})
+			myChart.defaultColors = [
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#FFFF00")
+						]; 
+
+			x.fontFamily = "Monotype Corsiva";
+			x.fontSize = 18;
+			y.fontFamily = "Monotype Corsiva";
+			y.fontSize = 18;
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 14;
+
+			myChart.staggerDraw = true;
+			myChart.ease = "bounce";
+			myChart.draw(1000);
+			y.tickFormat = ".d"; //for float number format
+
+			x.titleShape.text("Subcellular localization classes");
+			y.titleShape.text("Sequence frequency per localization class(%)");
+
+    			/*s.shapes.each(function(d) {
+
+				var key1 , key2 , id;
+
+				if(d.key.includes("Dataset_")){key1 = "Dataset";}
+				else{key1 = "Reference";}
+				key2 = d.x;
+
+				for (var i = 0 ; i < barChartData.length ; i++) {
+
+					if(barChartData[i].Reference == key1 && barChartData[i].Localization == key2){id = i;}
 				};
+	            var shape = d3.select(this),
 
-				var svg = dimple.newSvg("#chartStage", 1200, 600);		
-				var myChart = new dimple.chart(svg, DoublebarChartData);
+	            height = myChart.y + myChart.height - y._scale(d.height);
+
+	            width = d.width;
+
+	            svg.append("text")
+
+
+
+	            .attr("x", parseFloat(shape.attr("x")) + parseFloat(shape.attr("width"))/2)
+	            .attr("y", y._scale(d.height/2))
+	            .style("text-anchor", "middle")
+	            .style("font-size", "10px")
+	            .style("font-family", "sans-serif")
+	            .style("opacity", 0.7)
+	            .text(d3.format("")(barChartData[id].da));
+
+	          });*/
+			};
+
+
+
+		function stackedBarDrawing(data){
+
+			var stackedChartData = [];
+
+			for (var obj in data){
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["reference_81_100_percentage"],
+						"Sequences": "Reference",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["dataset1_81_100_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["dataset2_81_100_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["reference_41_80_percentage"],
+						"Sequences": "Reference",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["dataset1_41_80_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["dataset2_41_80_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["reference_0_40_percentage"],
+						"Sequences": "Reference",
+						"Order": 3 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["dataset1_0_40_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 3 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["dataset2_0_40_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 3 
+					})
+			};
+			
+			var svg = dimple.newSvg("#chartStacked", 1200, 600);
+				var myChart = new dimple.chart(svg, stackedChartData);
 
 				var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
-				var y = myChart.addMeasureAxis("y",  "Sequence frequency");
 
-				var s = myChart.addSeries("Sequences", dimple.plot.bar);
+				var y = myChart.addMeasureAxis("y",  "Value");
 
+				var s = myChart.addSeries( ["Order", "Reliability"], dimple.plot.bar);
+				s.addOrderRule("Order");
+				
+				s.categoryFields = ["Reliability"];
 				myLegend = myChart.addLegend(200, 10, 510, 20, "right");
 
 
 				myChart.defaultColors = [
-				    			new dimple.color("#0099FF"),
-				    			new dimple.color("#FF6347"),
-				    			new dimple.color("#FFFF00")
-							]; 
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#FFFF00")
+						];  
+
 
 				x.fontFamily = "Monotype Corsiva";
 				x.fontSize = 18;
@@ -157,349 +302,212 @@
 				y.fontSize = 18;
 				myLegend.fontFamily = "Monotype Corsiva";
 				myLegend.fontSize = 14;
+				
 
 				myChart.staggerDraw = true;
 				myChart.ease = "bounce";
 				myChart.draw(1000);
 				y.tickFormat = ".d"; //for float number format
 
-				x.titleShape.text("Subcellular localization classes");
-				y.titleShape.text("Sequence frequency per localization class(%)");
+				x.titleShape.text(" ");
+				y.titleShape.text("Sequence frequency per localization class and RI(%)");
 
-	    			/*s.shapes.each(function(d) {
-
-					var key1 , key2 , id;
-
-					if(d.key.includes("Dataset_")){key1 = "Dataset";}
-					else{key1 = "Reference";}
-					key2 = d.x;
-
-					for (var i = 0 ; i < barChartData.length ; i++) {
-
-						if(barChartData[i].Reference == key1 && barChartData[i].Localization == key2){id = i;}
-					};
-		            var shape = d3.select(this),
-
-		            height = myChart.y + myChart.height - y._scale(d.height);
-
-		            width = d.width;
-
-		            svg.append("text")
+				/*
+				s.shapes.each(function(d) {
+					
+					var shape = d3.select(this);
+					svg.append("text")
+	                .attr("x", parseFloat(shape.attr("x")) + parseInt(shape.attr('width')) / 2)
+	                .attr("y", y._scale(d.height/2))
+	                .style("text-anchor", "middle")
+	                .style("font-size", "10px")
+	                .style("font-family", "sans-serif")
+	                .style("opacity", 0.7)
+	                .text(d.yValue);
+		           });
+*/
+		}
 
 
 
-		            .attr("x", parseFloat(shape.attr("x")) + parseFloat(shape.attr("width"))/2)
-		            .attr("y", y._scale(d.height/2))
-		            .style("text-anchor", "middle")
-		            .style("font-size", "10px")
-		            .style("font-family", "sans-serif")
-		            .style("opacity", 0.7)
-		            .text(d3.format("")(barChartData[id].da));
+		function pieBarDrawing(data){
 
-		          });*/
-				};
-
-
-			function stackedBarDrawing(data){
-
-				var stackedChartData = [];
+			var pieChartData = [];
 
 				for (var obj in data){
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [81..100]",
-							"Value": data[obj]["reference_81_100_percentage"],
+
+						pieChartData.push({
+
+							"Type": obj,
+							"Reference Sequences": data[obj]["reference_sequences"],
+							"Dataset 1 Sequences": data[obj]["dataset1_sequences"],
+							"Dataset 2 Sequences": data[obj]["dataset2_sequences"]
+					
+						})
+				//}
+				};
+
+			var width = 600;
+			var height = 500;
+
+
+			var svg = dimple.newSvg("#chartPie", width, height);   
+			//svg.Attr("preserveAspectRatio", "xMinYMin meet");
+	        var myChart = new dimple.chart(svg, pieChartData);
+
+	        svg.append("text")
+	        		.attr("x", width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Dataset 1");
+		    
+			var y = myChart.addMeasureAxis("p",  "Dataset 1 Sequences");
+			myChart.addSeries( "Type", dimple.plot.pie);
+			y.tickFormat = ".d";
+
+			myLegend = myChart.addLegend(400, 20, 150, 300, "right");
+		    
+
+
+			myChart.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						];
+
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 13;  
+
+						
+
+		    myChart.draw();
+
+		    ////////////////////////////////////////////////////////////////////////////////////////
+
+
+			var svg2 = dimple.newSvg("#chartPie", width, height);	    
+	        var myChart2 = new dimple.chart(svg2, pieChartData);
+
+	        svg2.append("text")
+	        		.attr("x",  width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Dataset 2");
+		    
+			var y2 = myChart2.addMeasureAxis("p",  "Dataset 2 Sequences");
+
+			myChart2.addSeries( "Type", dimple.plot.pie);
+			y2.tickFormat = ".d";
+
+		    myLegend2 = myChart2.addLegend(400, 20, 150, 300, "right");
+		    
+
+
+			myChart2.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						]; 
+
+			myLegend2.fontFamily = "Monotype Corsiva";
+			myLegend2.fontSize = 13; 
+
+
+		    myChart2.draw();
+
+
+			var svg3 = dimple.newSvg("#chartPie", width, height);	    
+	        var myChart3 = new dimple.chart(svg3, pieChartData);
+
+	        svg3.append("text")
+	        		.attr("x",  width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Reference");
+		    
+			var y3 = myChart3.addMeasureAxis("p",  "Reference Sequences");
+
+			myChart3.addSeries( "Type", dimple.plot.pie);
+			y3.tickFormat = ".d";
+
+		    myLegend3 = myChart3.addLegend(400, 20, 150, 300, "right");
+		    
+
+
+			myChart3.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						]; 
+
+			myLegend3.fontFamily = "Monotype Corsiva";
+			myLegend3.fontSize = 13; 
+
+		    myChart3.draw();
+		}
+
+
+		function Disorder(data){
+
+			var disorder30Data = [];
+
+				for (var obj in data){
+						disorder30Data.push({
+							"Disordered Regions" : obj,
 							"Sequences": "Reference",
-							"Order": 1 
+							"Number of Sequences": data[obj]["reference_sequences"]
 						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [81..100]",
-							"Value": data[obj]["dataset1_81_100_percentage"],
+						disorder30Data.push({
+							"Disordered Regions" : obj,
 							"Sequences": "Dataset 1",
-							"Order": 1 
+							"Number of Sequences": data[obj]["dataset1_sequences"]
 						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [81..100]",
-							"Value": data[obj]["dataset2_81_100_percentage"],
+						disorder30Data.push({
+							"Disordered Regions" : obj,
 							"Sequences": "Dataset 2",
-							"Order": 1 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [41..80]",
-							"Value": data[obj]["reference_41_80_percentage"],
-							"Sequences": "Reference",
-							"Order": 2 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [41..80]",
-							"Value": data[obj]["dataset1_41_80_percentage"],
-							"Sequences": "Dataset 1",
-							"Order": 2 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [41..80]",
-							"Value": data[obj]["dataset2_41_80_percentage"],
-							"Sequences": "Dataset 2",
-							"Order": 2 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [0..40]",
-							"Value": data[obj]["reference_0_40_percentage"],
-							"Sequences": "Reference",
-							"Order": 3 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [0..40]",
-							"Value": data[obj]["dataset1_0_40_percentage"],
-							"Sequences": "Dataset 1",
-							"Order": 3 
-						})
-						stackedChartData.push({
-							"Localization": obj,
-							"Reliability": "Reliability Index [0..40]",
-							"Value": data[obj]["dataset2_0_40_percentage"],
-							"Sequences": "Dataset 2",
-							"Order": 3 
+							"Number of Sequences": data[obj]["dataset2_sequences"]
 						})
 				};
-				
-				var svg = dimple.newSvg("#chartStacked", 1200, 600);
-					var myChart = new dimple.chart(svg, stackedChartData);
 
-					var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
+			var svg = dimple.newSvg("#mDisorder30", 1200, 600);
+      		var myChart = new dimple.chart(svg, disorder30Data);
 
-					var y = myChart.addMeasureAxis("y",  "Value");
+      		var x = myChart.addCategoryAxis("x", "Disordered Regions");
+      		var y = myChart.addMeasureAxis("y", "Number of Sequences");
+      		var s = myChart.addSeries("Sequences", dimple.plot.line);
 
-					var s = myChart.addSeries( ["Order", "Reliability"], dimple.plot.bar);
-					s.addOrderRule("Order");
-					
-					s.categoryFields = ["Reliability"];
-					myLegend = myChart.addLegend(200, 10, 510, 20, "right");
+      		s.lineWeight = 3;
+      		s.lineMarkers = true;
+      		y.tickFormat = " ";
+			x.addOrderRule("Disordered Regions");
+			//x.titleShape.text("Subcellular localization classes");
+			//y.titleShape.text("Sequence frequency per localization class(%)");
 
+      		myLegend = myChart.addLegend(60, 10, 500, 20, "right");
 
-					myChart.defaultColors = [
-				    			new dimple.color("#0099FF"),
-				    			new dimple.color("#FF6347"),
-				    			new dimple.color("#FFFF00")
-							];  
-
-
-					x.fontFamily = "Monotype Corsiva";
-					x.fontSize = 18;
-					y.fontFamily = "Monotype Corsiva";
-					y.fontSize = 18;
-					myLegend.fontFamily = "Monotype Corsiva";
-					myLegend.fontSize = 14;
-					
-
-					myChart.staggerDraw = true;
-					myChart.ease = "bounce";
-					myChart.draw(1000);
-					y.tickFormat = ".d"; //for float number format
-
-					x.titleShape.text(" ");
-					y.titleShape.text("Sequence frequency per localization class and RI(%)");
-
-					/*
-					s.shapes.each(function(d) {
-						
-						var shape = d3.select(this);
-						svg.append("text")
-		                .attr("x", parseFloat(shape.attr("x")) + parseInt(shape.attr('width')) / 2)
-		                .attr("y", y._scale(d.height/2))
-		                .style("text-anchor", "middle")
-		                .style("font-size", "10px")
-		                .style("font-family", "sans-serif")
-		                .style("opacity", 0.7)
-		                .text(d.yValue);
-			           });
-	*/
-			}
-
-
-			function pieBarDrawing(data){
-
-				var pieChartData = [];
-
-					for (var obj in data){
-
-							pieChartData.push({
-
-								"Type": obj,
-								"Reference Sequences": data[obj]["reference_sequences"],
-								"Dataset 1 Sequences": data[obj]["dataset1_sequences"],
-								"Dataset 2 Sequences": data[obj]["dataset2_sequences"]
-						
-							})
-					};
-
-				var width = 600;
-				var height = 500;
-
-
-				var svg = dimple.newSvg("#chartPie", width, height);   
-				//svg.Attr("preserveAspectRatio", "xMinYMin meet");
-		        var myChart = new dimple.chart(svg, pieChartData);
-
-		        svg.append("text")
-		        		.attr("x", width/2)
-	    				.attr("y", 20)
-		                .style("text-anchor", "middle")
-		                .style("font-size", "14px")
-		                .style("font-family", "Monotype Corsiva")
-		                .text("Dataset 1");
-			    
-				var y = myChart.addMeasureAxis("p",  "Dataset 1 Sequences");
-				myChart.addSeries( "Type", dimple.plot.pie);
-				y.tickFormat = ".d";
-
-				myLegend = myChart.addLegend(400, 20, 150, 300, "right");
-			    
-
-
-				myChart.defaultColors = [
+      		
+			myChart.defaultColors = [
 			    			new dimple.color("#0099FF"),
 			    			new dimple.color("#FF6347"),
 			    			new dimple.color("#FFFF00")
-							];
+						]; 
 
-				myLegend.fontFamily = "Monotype Corsiva";
-				myLegend.fontSize = 13;  
+			x.fontFamily = "Monotype Corsiva";
+			x.fontSize = 18;
+			y.fontFamily = "Monotype Corsiva";
+			y.fontSize = 18;
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 14;
+      		
+      		myChart.draw();
 
-							
-
-			    myChart.draw();
-
-			    ////////////////////////////////////////////////////////////////////////////////////////
-
-
-				var svg2 = dimple.newSvg("#chartPie", width, height);	    
-		        var myChart2 = new dimple.chart(svg2, pieChartData);
-
-		        svg2.append("text")
-		        		.attr("x",  width/2)
-	    				.attr("y", 20)
-		                .style("text-anchor", "middle")
-		                .style("font-size", "14px")
-		                .style("font-family", "Monotype Corsiva")
-		                .text("Dataset 2");
-			    
-				var y2 = myChart2.addMeasureAxis("p",  "Dataset 2 Sequences");
-
-				myChart2.addSeries( "Type", dimple.plot.pie);
-				y2.tickFormat = ".d";
-
-			    myLegend2 = myChart2.addLegend(400, 20, 150, 300, "right");
-			    
-
-
-				myChart2.defaultColors = [
-			    			new dimple.color("#0099FF"),
-			    			new dimple.color("#FF6347"),
-			    			new dimple.color("#FFFF00")
-							]; 
-
-				myLegend2.fontFamily = "Monotype Corsiva";
-				myLegend2.fontSize = 13; 
-
-
-			    myChart2.draw();
-
-
-				var svg3 = dimple.newSvg("#chartPie", width, height);	    
-		        var myChart3 = new dimple.chart(svg3, pieChartData);
-
-		        svg3.append("text")
-		        		.attr("x",  width/2)
-	    				.attr("y", 20)
-		                .style("text-anchor", "middle")
-		                .style("font-size", "14px")
-		                .style("font-family", "Monotype Corsiva")
-		                .text("Reference");
-			    
-				var y3 = myChart3.addMeasureAxis("p",  "Reference Sequences");
-
-				myChart3.addSeries( "Type", dimple.plot.pie);
-				y3.tickFormat = ".d";
-
-			    myLegend3 = myChart3.addLegend(400, 20, 150, 300, "right");
-			    
-
-
-				myChart3.defaultColors = [
-			    			new dimple.color("#0099FF"),
-			    			new dimple.color("#FF6347"),
-			    			new dimple.color("#FFFF00")
-							]; 
-
-				myLegend3.fontFamily = "Monotype Corsiva";
-				myLegend3.fontSize = 13; 
-
-			    myChart3.draw();
-			}
-
-			function Disorder(data){
-
-				var disorder30Data = [];
-
-					for (var obj in data){
-							disorder30Data.push({
-								"Disordered Regions" : obj,
-								"Sequences": "Reference",
-								"Number of Sequences": data[obj]["reference_sequences"]
-							})
-							disorder30Data.push({
-								"Disordered Regions" : obj,
-								"Sequences": "Dataset 1",
-								"Number of Sequences": data[obj]["dataset1_sequences"]
-							})
-							disorder30Data.push({
-								"Disordered Regions" : obj,
-								"Sequences": "Dataset 2",
-								"Number of Sequences": data[obj]["dataset2_sequences"]
-							})
-					};
-
-				var svg = dimple.newSvg("#mDisorder30", 1200, 600);
-	      		var myChart = new dimple.chart(svg, disorder30Data);
-	      		var x = myChart.addCategoryAxis("x", "Disordered Regions");
-	      		var y = myChart.addMeasureAxis("y", "Number of Sequences");
-	      		var s = myChart.addSeries("Sequences", dimple.plot.line);
-
-	      		s.lineWeight = 3;
-	      		s.lineMarkers = true;
-	      		y.tickFormat = " ";
-				x.addOrderRule("Disordered Regions");
-				//x.titleShape.text("Subcellular localization classes");
-				//y.titleShape.text("Sequence frequency per localization class(%)");
-
-	      		myLegend = myChart.addLegend(60, 10, 500, 20, "right");
-
-	      		
-				myChart.defaultColors = [
-				    			new dimple.color("#0099FF"),
-				    			new dimple.color("#FF6347"),
-				    			new dimple.color("#FFFF00")
-							]; 
-
-				x.fontFamily = "Monotype Corsiva";
-				x.fontSize = 18;
-				y.fontFamily = "Monotype Corsiva";
-				y.fontSize = 18;
-				myLegend.fontFamily = "Monotype Corsiva";
-				myLegend.fontSize = 14;
-	      		
-	      		myChart.draw();
-
-			}
-
+		}
 
 		</script>
 	</body>

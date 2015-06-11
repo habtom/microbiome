@@ -1,98 +1,165 @@
 <html>
 	<head>
-
+		<meta charset="utf-8">
+		<title></title>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+  		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
 	</head>
 	<body>
   		<div id="chartStage"></div>
   		<div id="chartStacked"></div>
   		<div id="chartPie"></div>
-  		<script src="http://d3js.org/d3.v3.min.js"></script>
-		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+  		<div id="mDisorder"></div>
 		<script type="text/javascript">
-		
-			var barChartData = [
-			
-						{"Localization": "cytoplasm","Density(%)": "83.1","Reference": "Dataset", "count": "2064"}, 
-						{"Localization": "cytoplasm","Density(%)": "52.7","Reference": "Reference", "count": "72245"}, 
-						{"Localization": "outer","Density(%)": "1.9","Reference": "Dataset", "count": "810"},
-						{"Localization": "outer","Density(%)": "1.7","Reference": "Reference", "count": "2348"},
-						{"Localization": "fimbrium","Density(%)": "0.1","Reference": "Dataset", "count": "72245"}, 
-						{"Localization": "fimbrium","Density(%)": "0.6","Reference": "Reference","count": "810"}, 
-						{"Localization": "periplasm","Density(%)": "6.2","Reference": "Dataset","count": "92"}, 
-						{"Localization": "periplasm","Density(%)": "3.8","Reference": "Reference", "count": "5262"}, 
-						{"Localization": "secreted","Density(%)": "5.0","Reference": "Dataset", "count": "25931"}, 
-						{"Localization": "secreted","Density(%)": "22.2","Reference": "Reference" , "count": "30421"}, 
-						{"Localization": "inner","Density(%)": "3.7","Reference": "Dataset", "count": "2"}, 
-						{"Localization": "inner","Density(%)": "18.9","Reference": "Reference", "count": "25931"}
-						
-					];
-///////////////////////////////////////////////////////////STACKED DATA///////////////////////////////////////////////////////////////////
-			var stackedChartData = [
-					{"Localization":"cytoplasm","Reliability":"Reliability Index [81..100]", "Value":"33.6","Reference": "Dataset","Order":1}, 
-					{"Localization":"cytoplasm","Reliability":"Reliability Index [81..100]", "Value": "27.3","Reference":"Reference","Order":1}, 
-					{"Localization": "outer","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1},
-					{"Localization": "outer","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1},
-					{"Localization": "fimbrium","Reliability":"Reliability Index [81..100]", "Value": "0.6","Reference": "Dataset","Order":1}, 
-					{"Localization": "fimbrium","Reliability":"Reliability Index [81..100]", "Value": "7.7","Reference": "Reference","Order":1}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Dataset","Order":1}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [81..100]", "Value": null,"Reference": "Reference","Order":1}, 
-					{"Localization": "inner","Reliability":"Reliability Index [81..100]", "Value": "0.6","Reference": "Dataset","Order":1}, 
-					{"Localization": "inner","Reliability":"Reliability Index [81..100]", "Value": "0.3","Reference": "Reference","Order":1},
 
-					{"Localization":"cytoplasm","Reliability":"Reliability Index [41..80]","Value":"23.9","Reference":"Dataset","Order":2}, 
-					{"Localization":"cytoplasm","Reliability":"Reliability Index [41..80]", "Value": "10.9","Reference": "Reference","Order":2}, 
-					{"Localization": "outer","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2},
-					{"Localization": "outer","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2},
-					{"Localization": "fimbrium","Reliability":"Reliability Index [41..80]", "Value": "0.1","Reference": "Dataset","Order":2}, 
-					{"Localization": "fimbrium","Reliability":"Reliability Index [41..80]", "Value": "2.0","Reference": "Reference","Order":2}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Dataset","Order":2}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [41..80]", "Value": null,"Reference": "Reference","Order":2}, 
-					{"Localization": "inner","Reliability":"Reliability Index [41..80]", "Value": "0.8","Reference": "Dataset","Order":2}, 
-					{"Localization": "inner","Reliability":"Reliability Index [41..80]", "Value": "0.7","Reference": "Reference","Order":2},
-						
-					{"Localization": "cytoplasm","Reliability":"Reliability Index [0..40]", "Value": "25.6","Reference": "Dataset","Order":3}, 
-					{"Localization": "cytoplasm","Reliability":"Reliability Index [0..40]", "Value": "14.5","Reference": "Reference","Order":3}, 
-					{"Localization": "outer","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3},
-					{"Localization": "outer","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3},
-					{"Localization": "fimbrium","Reliability":"Reliability Index [0..40]", "Value": "3.0","Reference": "Dataset","Order":3}, 
-					{"Localization": "fimbrium","Reliability":"Reliability Index [0..40]", "Value": "9.2","Reference": "Reference","Order":3}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3}, 
-					{"Localization": "periplasm","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Dataset","Order":3}, 
-					{"Localization": "secreted","Reliability":"Reliability Index [0..40]", "Value": null,"Reference": "Reference","Order":3}, 
-					{"Localization": "inner","Reliability":"Reliability Index [0..40]", "Value": "4.9","Reference": "Dataset","Order":3}, 
-					{"Localization": "inner","Reliability":"Reliability Index [0..40]", "Value": "2.8","Reference": "Reference","Order":3}
-						
-					];
-//////////////////////////////////////////////////////////////////////// PIECHART Data /////////////////////////////////////////////////////////
+			var JSON_LC3Distribution = {
 
-			var pieChartData = [
+							"cytoplasm": 	{"dataset2_percentage":"83.1","dataset1_percentage":"88.2","reference_percentage":"52.7"},
+							"outer":        {"dataset2_percentage":"1.9","dataset1_percentage":"1.8","reference_percentage":"1.7"},
+							"fimbrium": 	{"dataset2_percentage":"0.1","dataset1_percentage":"0.3","reference_percentage":"0.6"},
+							"periplasm": 	{"dataset2_percentage":"6.2","dataset1_percentage":"4.3","reference_percentage":"3.8"},
+							"secreted": 	{"dataset2_percentage":"5.0","dataset1_percentage":"3.8","reference_percentage":"22.2"},
+							"inner": 		{"dataset2_percentage":"3.7","dataset1_percentage":"1.5","reference_percentage":"18.9"}
+
+						}
+
+			var JSON_LC3distributionRI = {
+
+							"cytoplasm": {"dataset1_41_80_percentage":"27.6","dataset2_81_100_percentage":"33.6","dataset1_81_100_percentage":"37.2","reference_0_40_percentage":"14.5","dataset2_41_80_percentage":"23.9","dataset1_0_40_percentage":"23.3","reference_81_100_percentage":"27.3","dataset2_0_40_percentage":"25.6","reference_41_80_percentage":"10.9"},
+							"outer":     {"dataset1_41_80_percentage":null,"dataset2_81_100_percentage":null,"dataset1_81_100_percentage":null,"reference_0_40_percentage":null,"dataset2_41_80_percentage":null,"dataset1_0_40_percentage":null,"reference_81_100_percentage":null,"dataset2_0_40_percentage":null,"reference_41_80_percentage":null},
+							"fimbrium":  {"dataset1_41_80_percentage":"0.1","dataset2_81_100_percentage":"0.6","dataset1_81_100_percentage":"0.3","reference_0_40_percentage":"9.2","dataset2_41_80_percentage":"0.1","dataset1_0_40_percentage":"1.0","reference_81_100_percentage":"7.7","dataset2_0_40_percentage":"3.0","reference_41_80_percentage":"2.0"},
+							"periplasm": {"dataset1_41_80_percentage":null,"dataset2_81_100_percentage":null,"dataset1_81_100_percentage":null,"reference_0_40_percentage":null,"dataset2_41_80_percentage":null,"dataset1_0_40_percentage":null,"reference_81_100_percentage":null,"dataset2_0_40_percentage":null,"reference_41_80_percentage":null},
+							"secreted":  {"dataset1_41_80_percentage":null,"dataset2_81_100_percentage":null,"dataset1_81_100_percentage":null,"reference_0_40_percentage":null,"dataset2_41_80_percentage":null,"dataset1_0_40_percentage":null,"reference_81_100_percentage":null,"dataset2_0_40_percentage":null,"reference_41_80_percentage":null},
+							"inner":     {"dataset1_41_80_percentage":"0.9","dataset2_81_100_percentage":"0.6","dataset1_81_100_percentage":"0.7","reference_0_40_percentage":"2.8","dataset2_41_80_percentage":"0.8","dataset1_0_40_percentage":"2.7","reference_81_100_percentage":"0.3","dataset2_0_40_percentage":"4.9","reference_41_80_percentage":"0.7"}
+
+						}
+
+			var	JSON_TMSEG_distribution = {
+
+						  "Transmembrane proteins": {"dataset2_sequences":"109","reference_sequences":"28359","dataset1_sequences":"55"},
+						  "Signaling proteins":		{"dataset2_sequences":" 166","reference_sequences":" 19600","dataset1_sequences":" 120"},
+						  "No prediction": 			{"dataset2_sequences":" 2208","reference_sequences":" 89058","dataset1_sequences":" 2228"}
+
+						}
+			var JSON_MDISORDER_disordered_30 = {
+
+						"6":{"dataset2_sequences":"1","reference_sequences":"21","dataset1_sequences":0},
+						"1":{"dataset2_sequences":"230","reference_sequences":"22913","dataset1_sequences":"293"},
+						"4":{"dataset2_sequences":"1","reference_sequences":"75","dataset1_sequences":0},
+						"0":{"dataset2_sequences":"2204","reference_sequences":"110035","dataset1_sequences":"2035"},
+						"3":{"dataset2_sequences":"2","reference_sequences":"437","dataset1_sequences":"3"},
+						"2":{"dataset2_sequences":"44","reference_sequences":"3502","dataset1_sequences":"72"}
+
+						}
+
+		    var JSON_MDISORDER_ordered_50 = {
+
+						"6":{"dataset2_sequences":"7","reference_sequences":"189","dataset1_sequences":"2"},
+						"3":{"dataset2_sequences":"100","reference_sequences":"5257","dataset1_sequences":"68"},
+						"7":{"dataset2_sequences":"1","reference_sequences":"69","dataset1_sequences":"3"},
+						"2":{"dataset2_sequences":"427","reference_sequences":"20893","dataset1_sequences":"376"},
+						"8":{"dataset2_sequences":"0","reference_sequences":"40","dataset1_sequences":"1"},
+						"1":{"dataset2_sequences":"1629","reference_sequences":"66614","dataset1_sequences":"1400"},
+						"4":{"dataset2_sequences":"21","reference_sequences":"1550","dataset1_sequences":"17"},
+						"0":{"dataset2_sequences":"282","reference_sequences":"41792","dataset1_sequences":"533"},
+						"5":{"dataset2_sequences":"15","reference_sequences":"550","dataset1_sequences":"3"}
+				
+					}			
+
+
+			var JSON_MDISORDER_disordered_80 = {
+
+						"1":{"dataset2_sequences":"54","reference_sequences":"3831","dataset1_sequences":"36"},
+						"0":{"dataset2_sequences":"2427","reference_sequences":"133050","dataset1_sequences":"2367"},
+						"2":{"dataset2_sequences":"1","reference_sequences":"118","dataset1_sequences":100000}
+
+					}
+
+
+
+		handler("pie",JSON_TMSEG_distribution);
+		handler("disorder",JSON_MDISORDER_disordered_80);	
+		handler("doubleBar",JSON_LC3Distribution);
+		handler("stackedBar",JSON_LC3distributionRI);
+
+		function handler (type,data){
+			if(type == "doubleBar"){
+
+				doubleBarDrawing(data);
+			}
+			else if(type == "stackedBar"){
+
+				stackedBarDrawing(data);
+			}
+			else if(type == "pie"){
+
+				pieBarDrawing(data);
+			}
+			else if(type == "disorder"){
+
+				Disorder(data);
+			}
+
+		}
+
+
+		function doubleBarDrawing(data){
 			
-						{"Type": "Transmembrane proteins","dataset2_sequences": "109","reference_sequences": "28359" , }, 
-						//{"Type": "Transmembrane proteins","dataset2_sequences": "52.7","Reference": "Reference", "count": "72245"}, 
-						{"Type": "Signaling proteins","dataset2_sequences": "166","reference_sequences": "19600"},
-						//{"Type": "Signaling proteins","dataset2_sequences": "1.7","Sequences": "Reference", "count": "2348"},
-						{"Type": "No prediction","dataset2_sequences": "2208","reference_sequences": "89058"}, 
-						//{"Type": "No prediction","dataset2_sequences": "0.6","Sequences": "Reference","count": "810"}
+			var DoublebarChartData = [];
+
+			for (var obj in data){
+
+					DoublebarChartData.push({
+
+						"Localization": obj,
+						"Sequence frequency": data[obj]["reference_percentage"],
+						"Sequences": "Reference"
+						//"count": "Reference"
 						
-					];
-					
-		doubleBarDrawing();
-		function doubleBarDrawing(){
+
+					})
+					DoublebarChartData.push({
+
+						"Localization": obj,
+						"Sequence frequency": data[obj]["dataset1_percentage"],
+						"Sequences": "Dataset 1"
+						//"count": "Dataset"
+						
+					})
+					DoublebarChartData.push({
+
+						"Localization": obj,
+						"Sequence frequency": data[obj]["dataset2_percentage"],
+						"Sequences": "Dataset 2"
+						//"count": "Dataset"
+						
+					})
+			};
+
+
 			var svg = dimple.newSvg("#chartStage", 1200, 600);		
-			var myChart = new dimple.chart(svg, barChartData);
+			var myChart = new dimple.chart(svg, DoublebarChartData);
 
-			var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
-			var y = myChart.addMeasureAxis("y",  "Density(%)");
+			var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
+			var y = myChart.addMeasureAxis("y",  "Sequence frequency");
 
-			var s = myChart.addSeries("Reference", dimple.plot.bar);
+			var s = myChart.addSeries("Sequences", dimple.plot.bar);
+
+			myLegend = myChart.addLegend(200, 10, 510, 20, "right");
 
 
-			myChart.addLegend(200, 10, 510, 20, "right");
+			myChart.defaultColors = [
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#FFFF00")
+						]; 
+
+			x.fontFamily = "Monotype Corsiva";
+			x.fontSize = 18;
+			y.fontFamily = "Monotype Corsiva";
+			y.fontSize = 18;
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 14;
 
 			myChart.staggerDraw = true;
 			myChart.ease = "bounce";
@@ -102,7 +169,7 @@
 			x.titleShape.text("Subcellular localization classes");
 			y.titleShape.text("Sequence frequency per localization class(%)");
 
-			s.shapes.each(function(d) {
+    			/*s.shapes.each(function(d) {
 
 				var key1 , key2 , id;
 
@@ -114,40 +181,103 @@
 
 					if(barChartData[i].Reference == key1 && barChartData[i].Localization == key2){id = i;}
 				};
-	            // Get the shape as a d3 selection
 	            var shape = d3.select(this),
 
-	            // Get the height and width from the scales
 	            height = myChart.y + myChart.height - y._scale(d.height);
-	           // width = x._scale(d.width);
+
 	            width = d.width;
 
-	            // Add a text label for the value
 	            svg.append("text")
 
-	            // Position in the centre of the shape (vertical position is
-	            // manually set due to cross-browser problems with baseline)
+
+
 	            .attr("x", parseFloat(shape.attr("x")) + parseFloat(shape.attr("width"))/2)
 	            .attr("y", y._scale(d.height/2))
-	            // Centre align
 	            .style("text-anchor", "middle")
 	            .style("font-size", "10px")
 	            .style("font-family", "sans-serif")
-
-	            // Make it a little transparent to tone down the black
 	            .style("opacity", 0.7)
+	            .text(d3.format("")(barChartData[id].da));
 
-	            // Format the number
-	            .text(d3.format("")(barChartData[id].count));
-
-	          });
+	          });*/
 			};
-		stackedBarDrawing();
-		function stackedBarDrawing(){
+
+
+
+		function stackedBarDrawing(data){
+
+			var stackedChartData = [];
+
+			for (var obj in data){
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["reference_81_100_percentage"],
+						"Sequences": "Reference",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["dataset1_81_100_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [81..100]",
+						"Value": data[obj]["dataset2_81_100_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 1 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["reference_41_80_percentage"],
+						"Sequences": "Reference",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["dataset1_41_80_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [41..80]",
+						"Value": data[obj]["dataset2_41_80_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 2 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["reference_0_40_percentage"],
+						"Sequences": "Reference",
+						"Order": 3 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["dataset1_0_40_percentage"],
+						"Sequences": "Dataset 1",
+						"Order": 3 
+					})
+					stackedChartData.push({
+						"Localization": obj,
+						"Reliability": "Reliability Index [0..40]",
+						"Value": data[obj]["dataset2_0_40_percentage"],
+						"Sequences": "Dataset 2",
+						"Order": 3 
+					})
+			};
+			
 			var svg = dimple.newSvg("#chartStacked", 1200, 600);
 				var myChart = new dimple.chart(svg, stackedChartData);
 
-				var x = myChart.addCategoryAxis("x", ["Localization", "Reference"]);
+				var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
 
 				var y = myChart.addMeasureAxis("y",  "Value");
 
@@ -155,7 +285,24 @@
 				s.addOrderRule("Order");
 				
 				s.categoryFields = ["Reliability"];
-				myChart.addLegend(200, 10, 510, 20, "right");
+				myLegend = myChart.addLegend(200, 10, 510, 20, "right");
+
+
+				myChart.defaultColors = [
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#FFFF00")
+						];  
+
+
+				x.fontFamily = "Monotype Corsiva";
+				x.fontSize = 18;
+				y.fontFamily = "Monotype Corsiva";
+				y.fontSize = 18;
+				myLegend.fontFamily = "Monotype Corsiva";
+				myLegend.fontSize = 14;
+				
+
 				myChart.staggerDraw = true;
 				myChart.ease = "bounce";
 				myChart.draw(1000);
@@ -179,37 +326,62 @@
 		           });
 */
 		}
-		pieBarDrawing();
-		function pieBarDrawing(){
+
+
+
+		function pieBarDrawing(data){
+
+			var pieChartData = [];
+
+				for (var obj in data){
+
+						pieChartData.push({
+
+							"Type": obj,
+							"Reference Sequences": data[obj]["reference_sequences"],
+							"Dataset 1 Sequences": data[obj]["dataset1_sequences"],
+							"Dataset 2 Sequences": data[obj]["dataset2_sequences"]
+					
+						})
+				//}
+				};
+
 			var width = 600;
-			var height = 400;
+			var height = 500;
+
 
 			var svg = dimple.newSvg("#chartPie", width, height);   
+			//svg.Attr("preserveAspectRatio", "xMinYMin meet");
 	        var myChart = new dimple.chart(svg, pieChartData);
 
 	        svg.append("text")
 	        		.attr("x", width/2)
     				.attr("y", 20)
 	                .style("text-anchor", "middle")
-	                .style("font-size", "10px")
-	                .style("font-family", "sans-serif")
-	                .text("Dataset");
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Dataset 1");
 		    
-			var y = myChart.addMeasureAxis("p",  "dataset2_sequences");
+			var y = myChart.addMeasureAxis("p",  "Dataset 1 Sequences");
 			myChart.addSeries( "Type", dimple.plot.pie);
-			//mySeries = myChart.addSeries( ["dataset2_sequences","Type"], dimple.plot.pie);
 			y.tickFormat = ".d";
 
-			/*mySeries.getTooltipText = function (e) {
-                return [
-                    e.aggField[1] + ":" + e.aggField[0],
-                    (1000*aggField[0].piePct)/10
-                ];
-            };*/
-		    myLegend = myChart.addLegend(400, 20, 150, 300, "right");
+			myLegend = myChart.addLegend(400, 20, 150, 300, "right");
 		    
-		    myChart.draw();
 
+
+			myChart.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						];
+
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 13;  
+
+						
+
+		    myChart.draw();
 
 		    ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,19 +393,121 @@
 	        		.attr("x",  width/2)
     				.attr("y", 20)
 	                .style("text-anchor", "middle")
-	                .style("font-size", "10px")
-	                .style("font-family", "sans-serif")
-	                .text("Reference");
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Dataset 2");
 		    
-			var y2 = myChart2.addMeasureAxis("p",  "reference_sequences");
+			var y2 = myChart2.addMeasureAxis("p",  "Dataset 2 Sequences");
 
 			myChart2.addSeries( "Type", dimple.plot.pie);
 			y2.tickFormat = ".d";
 
 		    myLegend2 = myChart2.addLegend(400, 20, 150, 300, "right");
 		    
+
+
+			myChart2.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						]; 
+
+			myLegend2.fontFamily = "Monotype Corsiva";
+			myLegend2.fontSize = 13; 
+
+
 		    myChart2.draw();
+
+
+			var svg3 = dimple.newSvg("#chartPie", width, height);	    
+	        var myChart3 = new dimple.chart(svg3, pieChartData);
+
+	        svg3.append("text")
+	        		.attr("x",  width/2)
+    				.attr("y", 20)
+	                .style("text-anchor", "middle")
+	                .style("font-size", "14px")
+	                .style("font-family", "Monotype Corsiva")
+	                .text("Reference");
+		    
+			var y3 = myChart3.addMeasureAxis("p",  "Reference Sequences");
+
+			myChart3.addSeries( "Type", dimple.plot.pie);
+			y3.tickFormat = ".d";
+
+		    myLegend3 = myChart3.addLegend(400, 20, 150, 300, "right");
+		    
+
+
+			myChart3.defaultColors = [
+		    			new dimple.color("#0099FF"),
+		    			new dimple.color("#FF6347"),
+		    			new dimple.color("#FFFF00")
+						]; 
+
+			myLegend3.fontFamily = "Monotype Corsiva";
+			myLegend3.fontSize = 13; 
+
+		    myChart3.draw();
 		}
+
+
+		function Disorder(data){
+
+			var disorderData = [];
+
+				for (var obj in data){
+						disorderData.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Reference",
+							"Number of Sequences": data[obj]["reference_sequences"]
+						})
+						disorderData.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 1",
+							"Number of Sequences": data[obj]["dataset1_sequences"]
+						})
+						disorderData.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 2",
+							"Number of Sequences": data[obj]["dataset2_sequences"]
+						})
+				};
+
+			var svg = dimple.newSvg("#mDisorder", 1200, 600);
+      		var myChart = new dimple.chart(svg, disorderData);
+
+      		var x = myChart.addCategoryAxis("x", "Disordered Regions");
+      		var y = myChart.addMeasureAxis("y", "Number of Sequences");
+      		var s = myChart.addSeries("Sequences", dimple.plot.line);
+
+      		s.lineWeight = 3;
+      		s.lineMarkers = true;
+      		y.tickFormat = " ";
+			x.addOrderRule("Disordered Regions");
+			//x.titleShape.text("Subcellular localization classes");
+			//y.titleShape.text("Sequence frequency per localization class(%)");
+
+      		myLegend = myChart.addLegend(60, 10, 500, 20, "right");
+
+      		
+			myChart.defaultColors = [
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#FFFF00")
+						]; 
+
+			x.fontFamily = "Monotype Corsiva";
+			x.fontSize = 18;
+			y.fontFamily = "Monotype Corsiva";
+			y.fontSize = 18;
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 14;
+      		
+      		myChart.draw();
+
+		}
+
 		</script>
 	</body>
 </html>

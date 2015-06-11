@@ -3,10 +3,15 @@
 
 	</head>
 	<body>
-  		<div id="chartStage"></div>
+  		<!--div id="chartStage"></div>
   		<div id="chartStacked"></div>
-  		<div id="chartPie"></div>
-  		<div id="mDisorder"></div>
+  		<div id="chartPie1"></div>
+  		<div id="chartPie2"></div>
+  		<div id="chartPie3"></div>
+  		<div id="mDisorder30"></div>
+  		<div id="mOrder50"></div>
+  		<div id="mDisorder80"></div=-->
+
   		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
 		<script type="text/javascript">
@@ -76,33 +81,56 @@
 
 
 
-		handler("pie",JSON_TMSEG_distribution);
-		handler("disorder",JSON_MDISORDER_disordered_80);	
-		handler("doubleBar",JSON_LC3Distribution);
-		handler("stackedBar",JSON_LC3distributionRI);
+		//handler("disorder",JSON_MDISORDER_disordered_30);		
+		//handler("disorder",JSON_MDISORDER_disordered_80);
+		//handler("order50",JSON_MDISORDER_ordered_50);	
+		handler("pie",JSON_TMSEG_distribution,"Check 1");
+		handler("line",JSON_MDISORDER_disordered_30,"Check 1","Check 2");
+		handler("doubleBar",JSON_LC3Distribution,"Check 1",undefined,"asdasd");
+		handler("stackedBar",JSON_LC3distributionRI,undefined,undefined,"sadasd");
 
-		function handler (type,data){
+		function handler (type,data,label1,label2,divName){
+			label1 = typeof label1 !== 'undefined' ? label1 : "Dataset 1";
+			label2 = typeof label2 !== 'undefined' ? label2 : "Dataset 2";
 			if(type == "doubleBar"){
+				divName = typeof divName !== 'undefined' ? divName : "doubleBarChartDiv";
 
-				doubleBarDrawing(data);
+				doubleBarDrawing(data,label1,label2,divName);
 			}
 			else if(type == "stackedBar"){
+				divName = typeof divName !== 'undefined' ? divName : "stackedBarChartDiv";
 
-				stackedBarDrawing(data);
+				stackedBarDrawing(data,label1,label2,divName);
 			}
 			else if(type == "pie"){
+				divName = typeof divName !== 'undefined' ? divName : "pieBarChartDiv";
 
-				pieBarDrawing(data);
+				pieBarDrawing(data,label1,label2,divName);
 			}
-			else if(type == "disorder"){
+			else if(type == "line"){
+				divName = typeof divName !== 'undefined' ? divName : "lineBarChartDiv";
 
-				Disorder(data);
+				LineChartDrawing(data,label1,label2,divName);
 			}
+			/*else if(type == "disorder30"){
+
+				mDisorder30(data,label1,label2);
+			}
+			else if(type == "order50"){
+
+				mOrder50(data,label1,label2);
+			}
+			else if(type == "disorder80"){
+
+				mDisorder80(data,label1,label2);
+			}*/
 
 		}
 
 
-		function doubleBarDrawing(data){
+		function doubleBarDrawing(data,label1,label2,divName){
+			var div = document.createElement(divName);
+			document.body.appendChild(div);
 			
 			var DoublebarChartData = [];
 
@@ -121,7 +149,7 @@
 
 						"Localization": obj,
 						"Sequence frequency": data[obj]["dataset1_percentage"],
-						"Sequences": "Dataset 1"
+						"Sequences": label1
 						//"count": "Dataset"
 						
 					})
@@ -129,14 +157,14 @@
 
 						"Localization": obj,
 						"Sequence frequency": data[obj]["dataset2_percentage"],
-						"Sequences": "Dataset 2"
+						"Sequences": label2
 						//"count": "Dataset"
 						
 					})
 			};
 
 
-			var svg = dimple.newSvg("#chartStage", 1200, 600);		
+			var svg = dimple.newSvg(div, 1200, 600);		
 			var myChart = new dimple.chart(svg, DoublebarChartData);
 
 			var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
@@ -150,7 +178,7 @@
 			myChart.defaultColors = [
 			    			new dimple.color("#0099FF"),
 			    			new dimple.color("#FF6347"),
-			    			new dimple.color("#FFFF00")
+			    			new dimple.color("#CD853F")
 						]; 
 
 			x.fontFamily = "Monotype Corsiva";
@@ -203,7 +231,9 @@
 
 
 
-		function stackedBarDrawing(data){
+		function stackedBarDrawing(data,label1,label2,divName){
+			var div = document.createElement(divName);
+			document.body.appendChild(div);
 
 			var stackedChartData = [];
 
@@ -219,14 +249,14 @@
 						"Localization": obj,
 						"Reliability": "Reliability Index [81..100]",
 						"Value": data[obj]["dataset1_81_100_percentage"],
-						"Sequences": "Dataset 1",
+						"Sequences": label1,
 						"Order": 1 
 					})
 					stackedChartData.push({
 						"Localization": obj,
 						"Reliability": "Reliability Index [81..100]",
 						"Value": data[obj]["dataset2_81_100_percentage"],
-						"Sequences": "Dataset 2",
+						"Sequences": label2,
 						"Order": 1 
 					})
 					stackedChartData.push({
@@ -240,14 +270,14 @@
 						"Localization": obj,
 						"Reliability": "Reliability Index [41..80]",
 						"Value": data[obj]["dataset1_41_80_percentage"],
-						"Sequences": "Dataset 1",
+						"Sequences": label1,
 						"Order": 2 
 					})
 					stackedChartData.push({
 						"Localization": obj,
 						"Reliability": "Reliability Index [41..80]",
 						"Value": data[obj]["dataset2_41_80_percentage"],
-						"Sequences": "Dataset 2",
+						"Sequences": label2,
 						"Order": 2 
 					})
 					stackedChartData.push({
@@ -261,19 +291,19 @@
 						"Localization": obj,
 						"Reliability": "Reliability Index [0..40]",
 						"Value": data[obj]["dataset1_0_40_percentage"],
-						"Sequences": "Dataset 1",
+						"Sequences": label1,
 						"Order": 3 
 					})
 					stackedChartData.push({
 						"Localization": obj,
 						"Reliability": "Reliability Index [0..40]",
 						"Value": data[obj]["dataset2_0_40_percentage"],
-						"Sequences": "Dataset 2",
+						"Sequences": label2,
 						"Order": 3 
 					})
 			};
 			
-			var svg = dimple.newSvg("#chartStacked", 1200, 600);
+			var svg = dimple.newSvg(div, 1200, 600);
 				var myChart = new dimple.chart(svg, stackedChartData);
 
 				var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
@@ -290,7 +320,7 @@
 				myChart.defaultColors = [
 			    			new dimple.color("#0099FF"),
 			    			new dimple.color("#FF6347"),
-			    			new dimple.color("#FFFF00")
+			    			new dimple.color("#CD853F")
 						];  
 
 
@@ -328,18 +358,38 @@
 
 
 
-		function pieBarDrawing(data){
+		function pieBarDrawing(data,label1,label2,divName){
+			var div = document.createElement(divName);
+			document.body.appendChild(div);
 
-			var pieChartData = [];
+			label1 = label1 ;
+			label2 = label2 ;
+
+			var pieChart1Data = [];
+			var pieChart2Data = [];
+			var pieChart3Data = [];
 
 				for (var obj in data){
 
-						pieChartData.push({
+						pieChart1Data.push({
 
 							"Type": obj,
-							"Reference Sequences": data[obj]["reference_sequences"],
-							"Dataset 1 Sequences": data[obj]["dataset1_sequences"],
-							"Dataset 2 Sequences": data[obj]["dataset2_sequences"]
+							"Number of Sequences": data[obj]["reference_sequences"],
+							"Name": "Reference"
+					
+						})
+						pieChart2Data.push({
+
+							"Type": obj,
+							"Number of Sequences": data[obj]["dataset1_sequences"],
+							"Name": label1
+					
+						})
+						pieChart3Data.push({
+
+							"Type": obj,
+							"Number of Sequences": data[obj]["dataset2_sequences"],
+							"Name": label2
 					
 						})
 				//}
@@ -349,9 +399,9 @@
 			var height = 500;
 
 
-			var svg = dimple.newSvg("#chartPie", width, height);   
+			var svg = dimple.newSvg(div, width, height);   
 			//svg.Attr("preserveAspectRatio", "xMinYMin meet");
-	        var myChart = new dimple.chart(svg, pieChartData);
+	        var myChart = new dimple.chart(svg, pieChart1Data);
 
 	        svg.append("text")
 	        		.attr("x", width/2)
@@ -359,12 +409,13 @@
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
 	                .style("font-family", "Monotype Corsiva")
-	                .text("Dataset 1");
+	                .text("Reference");
 		    
-			var y = myChart.addMeasureAxis("p",  "Dataset 1 Sequences");
-			myChart.addSeries( "Type", dimple.plot.pie);
+			var y = myChart.addMeasureAxis("p",  "Number of Sequences");
+			myChart.addSeries( ["Name","Type"], dimple.plot.pie);
 			y.tickFormat = ".d";
 
+			y.addOrderRule("Name");
 			myLegend = myChart.addLegend(400, 20, 150, 300, "right");
 		    
 
@@ -372,7 +423,7 @@
 			myChart.defaultColors = [
 		    			new dimple.color("#0099FF"),
 		    			new dimple.color("#FF6347"),
-		    			new dimple.color("#FFFF00")
+		    			new dimple.color("#CD853F")
 						];
 
 			myLegend.fontFamily = "Monotype Corsiva";
@@ -385,8 +436,8 @@
 		    ////////////////////////////////////////////////////////////////////////////////////////
 
 
-			var svg2 = dimple.newSvg("#chartPie", width, height);	    
-	        var myChart2 = new dimple.chart(svg2, pieChartData);
+			var svg2 = dimple.newSvg(div, width, height);	    
+	        var myChart2 = new dimple.chart(svg2, pieChart2Data);
 
 	        svg2.append("text")
 	        		.attr("x",  width/2)
@@ -394,11 +445,11 @@
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
 	                .style("font-family", "Monotype Corsiva")
-	                .text("Dataset 2");
+	                .text(label1);
 		    
-			var y2 = myChart2.addMeasureAxis("p",  "Dataset 2 Sequences");
+			var y2 = myChart2.addMeasureAxis("p",  "Number of Sequences");
 
-			myChart2.addSeries( "Type", dimple.plot.pie);
+			myChart2.addSeries( ["Name","Type"], dimple.plot.pie);
 			y2.tickFormat = ".d";
 
 		    myLegend2 = myChart2.addLegend(400, 20, 150, 300, "right");
@@ -408,7 +459,7 @@
 			myChart2.defaultColors = [
 		    			new dimple.color("#0099FF"),
 		    			new dimple.color("#FF6347"),
-		    			new dimple.color("#FFFF00")
+		    			new dimple.color("#CD853F")
 						]; 
 
 			myLegend2.fontFamily = "Monotype Corsiva";
@@ -418,8 +469,8 @@
 		    myChart2.draw();
 
 
-			var svg3 = dimple.newSvg("#chartPie", width, height);	    
-	        var myChart3 = new dimple.chart(svg3, pieChartData);
+			var svg3 = dimple.newSvg(div, width, height);	    
+	        var myChart3 = new dimple.chart(svg3, pieChart3Data);
 
 	        svg3.append("text")
 	        		.attr("x",  width/2)
@@ -427,11 +478,11 @@
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
 	                .style("font-family", "Monotype Corsiva")
-	                .text("Reference");
+	                .text(label2);
 		    
-			var y3 = myChart3.addMeasureAxis("p",  "Reference Sequences");
+			var y3 = myChart3.addMeasureAxis("p",  "Number of Sequences");
 
-			myChart3.addSeries( "Type", dimple.plot.pie);
+			myChart3.addSeries( ["Name","Type"], dimple.plot.pie);
 			y3.tickFormat = ".d";
 
 		    myLegend3 = myChart3.addLegend(400, 20, 150, 300, "right");
@@ -441,7 +492,7 @@
 			myChart3.defaultColors = [
 		    			new dimple.color("#0099FF"),
 		    			new dimple.color("#FF6347"),
-		    			new dimple.color("#FFFF00")
+		    			new dimple.color("#CD853F")
 						]; 
 
 			myLegend3.fontFamily = "Monotype Corsiva";
@@ -450,8 +501,9 @@
 		    myChart3.draw();
 		}
 
-
-		function Disorder(data){
+		function LineChartDrawing(data,label1,label2,divName){
+			var div = document.createElement(divName);
+			document.body.appendChild(div);
 
 			var disorderData = [];
 
@@ -463,18 +515,76 @@
 						})
 						disorderData.push({
 							"Disordered Regions" : obj,
-							"Sequences": "Dataset 1",
+							"Sequences": label1,
 							"Number of Sequences": data[obj]["dataset1_sequences"]
 						})
 						disorderData.push({
+							"Disordered Regions" : obj,
+							"Sequences": label2,
+							"Number of Sequences": data[obj]["dataset2_sequences"]
+						})
+				};
+
+			var svg = dimple.newSvg(div, 1200, 600);
+      		var myChart = new dimple.chart(svg, disorderData);
+
+      		var x = myChart.addCategoryAxis("x", "Disordered Regions");
+      		var y = myChart.addMeasureAxis("y", "Number of Sequences");
+      		var s = myChart.addSeries("Sequences", dimple.plot.line);
+
+      		s.lineWeight = 3;
+      		s.lineMarkers = true;
+      		y.tickFormat = " ";
+			x.addOrderRule("Disordered Regions");
+			//x.titleShape.text("Subcellular localization classes");
+			//y.titleShape.text("Sequence frequency per localization class(%)");
+
+      		myLegend = myChart.addLegend(60, 10, 500, 20, "right");
+
+      		
+			myChart.defaultColors = [
+			    			new dimple.color("#0099FF"),
+			    			new dimple.color("#FF6347"),
+			    			new dimple.color("#CD853F")
+						]; 
+
+			x.fontFamily = "Monotype Corsiva";
+			x.fontSize = 18;
+			y.fontFamily = "Monotype Corsiva";
+			y.fontSize = 18;
+			myLegend.fontFamily = "Monotype Corsiva";
+			myLegend.fontSize = 14;
+      		
+      		myChart.draw();
+
+
+		}
+
+		/*
+		function mDisorder30(data,label1,label2){
+
+			var disorder30Data = [];
+
+				for (var obj in data){
+						disorder30Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Reference",
+							"Number of Sequences": data[obj]["reference_sequences"]
+						})
+						disorder30Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 1",
+							"Number of Sequences": data[obj]["dataset1_sequences"]
+						})
+						disorder30Data.push({
 							"Disordered Regions" : obj,
 							"Sequences": "Dataset 2",
 							"Number of Sequences": data[obj]["dataset2_sequences"]
 						})
 				};
 
-			var svg = dimple.newSvg("#mDisorder", 1200, 600);
-      		var myChart = new dimple.chart(svg, disorderData);
+			var svg = dimple.newSvg("#mDisorder30", 1200, 600);
+      		var myChart = new dimple.chart(svg, disorder30Data);
 
       		var x = myChart.addCategoryAxis("x", "Disordered Regions");
       		var y = myChart.addMeasureAxis("y", "Number of Sequences");
@@ -506,6 +616,104 @@
       		myChart.draw();
 
 		}
+
+		function mOrder50(data,label1,label2){
+				var order50Data = [];
+
+				for (var obj in data){
+						order50Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Reference",
+							"Number of Sequences": data[obj]["reference_sequences"]
+						})
+						order50Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 1",
+							"Number of Sequences": data[obj]["dataset1_sequences"]
+						})
+						order50Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 2",
+							"Number of Sequences": data[obj]["dataset2_sequences"]							
+						})
+				};
+			    var svg = dimple.newSvg("#mOrder50", 1200, 600);
+
+			      var myChart = new dimple.chart(svg, order50Data);
+			      var x = myChart.addCategoryAxis("x", "Disordered Regions");
+			      x.addOrderRule("Disordered Regions");
+			      var y = myChart.addMeasureAxis("y", "Number of Sequences");
+			      var s = myChart.addSeries("Sequences", dimple.plot.line);
+			      s.lineWeight = 3;
+			      s.lineMarkers = true;
+      			  y.tickFormat = " ";
+				  
+			      
+			      var myLegend = myChart.addLegend(60, 10, 500, 20, "right");
+
+					myChart.defaultColors = [
+					    			new dimple.color("#0099FF"),
+					    			new dimple.color("#FF6347"),
+					    			new dimple.color("#FFFF00")
+								]; 
+
+					x.fontFamily = "Monotype Corsiva";
+					x.fontSize = 18;
+					y.fontFamily = "Monotype Corsiva";
+					y.fontSize = 18;
+					myLegend.fontFamily = "Monotype Corsiva";
+					myLegend.fontSize = 14;
+			      myChart.draw();
+
+		}
+
+		function mDisorder80(data,label1,label2){
+
+				var disorder80Data = [];
+
+				for (var obj in data){
+						disorder80Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Reference",
+							"Number of Sequences": data[obj]["reference_sequences"]
+						})
+						disorder80Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 1",
+							"Number of Sequences": data[obj]["dataset1_sequences"]
+						})
+						disorder80Data.push({
+							"Disordered Regions" : obj,
+							"Sequences": "Dataset 2",
+							"Number of Sequences": data[obj]["dataset2_sequences"]							
+						})
+				};
+			    var svg = dimple.newSvg("#mDisorder80", 1200, 600);
+    		      var myChart = new dimple.chart(svg, disorder80Data);
+			      var x = myChart.addCategoryAxis("x", "Disordered Regions");
+			      x.addOrderRule("Disordered Regions");
+			      var y = myChart.addMeasureAxis("y", "Number of Sequences");
+			      var s = myChart.addSeries("Sequences", dimple.plot.line);
+			      s.lineWeight = 3;
+			      s.lineMarkers = true;
+      			  y.tickFormat = " ";
+			      var myLegend = myChart.addLegend(60, 10, 500, 20, "right");
+
+					myChart.defaultColors = [
+					    			new dimple.color("#0099FF"),
+					    			new dimple.color("#FF6347"),
+					    			new dimple.color("#FFFF00")
+								]; 
+
+					x.fontFamily = "Monotype Corsiva";
+					x.fontSize = 18;
+					y.fontFamily = "Monotype Corsiva";
+					y.fontSize = 18;
+					myLegend.fontFamily = "Monotype Corsiva";
+					myLegend.fontSize = 14;
+			      myChart.draw();
+
+		}*/
 
 		</script>
 	</body>

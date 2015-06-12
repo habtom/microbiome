@@ -163,10 +163,13 @@
 					})
 			};
 
-
-			var svg = dimple.newSvg(div, 1200, 600);		
+			//console.log(divName)
+			div.style.display = "block";
+			//div.style.width = "500px";
+			//div.style.height = "500px";
+			var svg = dimple.newSvg(div, "100%", "100%");		
 			var myChart = new dimple.chart(svg, DoublebarChartData);
-
+			svg.attr("width", "100%").attr("height", "100%")
 			var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
 			var y = myChart.addMeasureAxis("y",  "Sequence frequency");
 
@@ -234,6 +237,7 @@
 		function stackedBarDrawing(data,label1,label2,divName){
 			var div = document.createElement(divName);
 			document.body.appendChild(div);
+			div.style.display = "block";
 
 			var stackedChartData = [];
 
@@ -303,7 +307,7 @@
 					})
 			};
 			
-			var svg = dimple.newSvg(div, 1200, 600);
+			var svg = dimple.newSvg(div, "100%", "100%");
 				var myChart = new dimple.chart(svg, stackedChartData);
 
 				var x = myChart.addCategoryAxis("x", ["Localization", "Sequences"]);
@@ -359,8 +363,17 @@
 
 
 		function pieBarDrawing(data,label1,label2,divName){
-			var div = document.createElement(divName);
-			document.body.appendChild(div);
+			var div1 = document.createElement(divName + "1");
+			document.body.appendChild(div1);
+			div1.style.display = "block";
+
+			var div2 = document.createElement(divName + "2");
+			document.body.appendChild(div2);
+			div2.style.display = "block";
+
+			var div3 = document.createElement(divName + "3");
+			document.body.appendChild(div3);
+			div3.style.display = "block";
 
 			label1 = label1 ;
 			label2 = label2 ;
@@ -395,16 +408,44 @@
 				//}
 				};
 
-			var width = 600;
-			var height = 500;
+			var width = 500;
+			var height = 400;
+			var textWidth = 500;
+			//var textHeight = window.innerHeight;
 
+			if((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("MSIE") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 ) || (!!document.documentMode == true )) 
+			    {
 
-			var svg = dimple.newSvg(div, width, height);   
+					//div1.style.marginTop = "150px";
+			        width = 500;
+			        height = 400;
+					textWidth = 500;
+					//textHeight = 400;
+			    }
+			else if(navigator.userAgent.indexOf("Opera") != -1 )
+			    {
+			     //alert('Opera');
+			    }
+			else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
+			    {
+			         
+					div1.style.width = 500;
+					div1.style.height = 400;
+					div2.style.width = 500;
+					div2.style.height = 400;
+					div3.style.width = 500;
+					div3.style.height = 400;
+
+					textWidth = 500;
+					//textHeight = div1.style.height;
+			    }
+
+			var svg = dimple.newSvg(div1,width ,height);   
 			//svg.Attr("preserveAspectRatio", "xMinYMin meet");
 	        var myChart = new dimple.chart(svg, pieChart1Data);
-
+	        //svg.attr("width", window.innerWidth).attr("height",window.innerHeight)
 	        svg.append("text")
-	        		.attr("x", width/2)
+	        		.attr("x", textWidth/2)
     				.attr("y", 20)
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
@@ -429,18 +470,17 @@
 			myLegend.fontFamily = "Monotype Corsiva";
 			myLegend.fontSize = 13;  
 
-						
-
+			
 		    myChart.draw();
 
 		    ////////////////////////////////////////////////////////////////////////////////////////
 
 
-			var svg2 = dimple.newSvg(div, width, height);	    
+			var svg2 = dimple.newSvg(div2, width, height);	    
 	        var myChart2 = new dimple.chart(svg2, pieChart2Data);
-
+	        //svg2.attr("width", window.innerWidth).attr("height",window.innerHeight)
 	        svg2.append("text")
-	        		.attr("x",  width/2)
+	        		.attr("x",  textWidth/2)
     				.attr("y", 20)
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
@@ -469,11 +509,11 @@
 		    myChart2.draw();
 
 
-			var svg3 = dimple.newSvg(div, width, height);	    
+			var svg3 = dimple.newSvg(div3, width, height);	    
 	        var myChart3 = new dimple.chart(svg3, pieChart3Data);
 
 	        svg3.append("text")
-	        		.attr("x",  width/2)
+	        		.attr("x",  textWidth/2)
     				.attr("y", 20)
 	                .style("text-anchor", "middle")
 	                .style("font-size", "14px")
@@ -504,7 +544,7 @@
 		function LineChartDrawing(data,label1,label2,divName){
 			var div = document.createElement(divName);
 			document.body.appendChild(div);
-
+			div.style.display = "block";
 			var disorderData = [];
 
 				for (var obj in data){
@@ -525,7 +565,7 @@
 						})
 				};
 
-			var svg = dimple.newSvg(div, 1200, 600);
+			var svg = dimple.newSvg(div, "100%", "100%");
       		var myChart = new dimple.chart(svg, disorderData);
 
       		var x = myChart.addCategoryAxis("x", "Disordered Regions");
